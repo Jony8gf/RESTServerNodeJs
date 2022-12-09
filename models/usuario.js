@@ -20,7 +20,7 @@ const UsuarioSchema = Schema({
     role: {
         type: String,
         required: true,
-        emun: ['ADMIN', 'USER']
+        // emun: ['ADMIN', 'USER']
     },
     estado: {
         type: Boolean,
@@ -32,5 +32,9 @@ const UsuarioSchema = Schema({
     }
 });
 
+UsuarioSchema.methods.toJSON = function() {
+    const {__v, password, ...user} = this.toObject();
+    return user;
+}
 
 module.exports = model('Usuario', UsuarioSchema);

@@ -1,35 +1,41 @@
-const { response } = require('express');
+const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 const Usuario = require('../models/usuario');
 
-const usuariosGet =(req, res = response) => {
+const usuariosGet = async (req = request, res = response) => {
 
-    const query = req.query;
+    const {limite = 5, desde = 0 } = req.query;
+    const query = {estado: true}
+    const usuarios = await Usuario.find(query)
+        .limit(Number(limite))
+        .skip(Number(desde));
+
+    // const total = await Usuario.countDocuments(query);
+    const total = usuarios.length;
+
+    // const resp = await Promise.all([
+    //     Usuario.find(query)
+    //         .limit(Number(limite))
+    //         .skip(Number(desde)),    
+    // ]);
 
     res.json({
         msg: 'get Usuarios',
-        query
+        total,
+        usuarios
     })
 }
 
 const usuariosPost = async (req, res = response) => {
 
-
     const {nombre, correo, password, role} = req.body;
     const usuario = new Usuario({nombre, correo, password, role});
 
-    //Verificar si el correo existe
-    const existeEmail = await Usuario.findOne({correo});
-
-    if(existeEmail){
-         return res.status(400).json({
-            msg: 'El correo ya está registrado'
-         })
-    }
+    //Verificar si el correo existe --> se paso a db-validators.js
 
     //Enciptar constrseña
     const salt = bcryptjs.genSaltSync();
-    usuario.password = bcryptjs.hashSync(usuario.password, salt)
+    usuario.password = bcryptjs.hashSync(usuario.password, salt);
 
     //Guardar en base de datoss
     try{
@@ -38,19 +44,24 @@ const usuariosPost = async (req, res = response) => {
         console.log(error)
     }
 
-    res.json({
-        usuario
-    })
+    res.json(usuario)
 }
 
-const usuariosPut =(req, res = response) => {
+const usuariosPut = async (req, res = response) => {
 
-    const id = req.params.id;
+    const {id} = req.params;
+    const {_id, __v, google, password, correo, ...resto} = req.body;
 
-    res.json({
-        msg: 'put Usuarios',
-        id
-    })
+    //TOdo validar id
+    if(password){
+        //Enciptar constrseña
+        const salt = bcryptjs.genSaltSync();
+        resto.password = bcryptjs.hashSync(password, salt);
+    }
+
+    const usuario = await Usuario.findByIdAndUpdate(id, resto);
+
+    res.json(usuario);
 }
 
 const usuariosDelete =(req, res = response) => {
