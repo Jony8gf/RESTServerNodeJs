@@ -64,7 +64,7 @@ const usuariosPut = async (req, res = response) => {
     res.json(usuario);
 }
 
-const usuariosDelete = async (req, res = response) => {
+const usuariosDelete = async (req = request, res = response) => {
 
     const {id} = req.params;
 
@@ -73,8 +73,9 @@ const usuariosDelete = async (req, res = response) => {
 
     //Cambiamos el estado
     const usuario = await Usuario.findByIdAndUpdate(id, {estado: false});
+    const usuarioAutenticado = req.usuario;
 
-    res.json(usuario)
+    res.status(200).json({usuario, usuarioAutenticado})
 }
 
 module.exports = {
