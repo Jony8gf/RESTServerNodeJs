@@ -1,3 +1,4 @@
+const { Categoria } = require('../models');
 const Role = require('../models/role');
 const Usuario = require('../models/usuario');
 
@@ -23,8 +24,18 @@ const usuarioById = async (id = '') => {
     }
 }
 
+const categoriaExistePorId = async (id = '') => {
+
+    const existeCategoria = await Categoria.findById(id);
+
+    if(!existeCategoria){
+       throw new Error('La categoria no está registrado');
+    }
+}
+
 module.exports= {
     esRoleValido, 
     emailExiste,
-    usuarioById
+    usuarioById, 
+    categoriaExistePorId
 }
