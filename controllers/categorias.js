@@ -1,6 +1,6 @@
 const { response, request } = require('express');
 
-const {Categoria, Usuario} = require('../models');
+const {Categoria} = require('../models');
 
 
 //obtenerCategorias - paginado - total - populate
@@ -48,8 +48,6 @@ const crearCategoria = async (req = request, res = response) => {
         nombre,
         usuario: req.usuario._id
     }
-
-    console.log(data);
     
     const categoria = new Categoria(data);
 

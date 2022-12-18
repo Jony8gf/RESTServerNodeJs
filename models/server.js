@@ -12,6 +12,7 @@ class Server{
         //Rutas
         this.authPath = "/auth";
         this.categoriasPath = "/categorias";
+        this.productosPath = "/productos";
         this.usuariosPath = "/usuarios";
 
         //Conectar a base de datos
@@ -43,6 +44,7 @@ class Server{
     routes(){
         this.app.use(this.authPath, require('../routes/auth'))
         this.app.use(this.categoriasPath, require('../routes/categorias'))
+        this.app.use(this.productosPath, require('../routes/productos'))
         this.app.use(this.usuariosPath, require('../routes/usuarios'))
     }
 
