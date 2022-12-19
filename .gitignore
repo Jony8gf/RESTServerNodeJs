@@ -1,3 +1,6 @@
 node_modules/
 # database/
 .env
+
+uploads/productos/**.*
+uploads/usuarios/**.*
