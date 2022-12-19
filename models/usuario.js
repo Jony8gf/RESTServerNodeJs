@@ -1,5 +1,4 @@
  const {Schema, model} = require('mongoose');
-const { usuarioById } = require('../helpers/db-validators');
 
 const UsuarioSchema = Schema({
     nombre: {
@@ -21,13 +20,13 @@ const UsuarioSchema = Schema({
     role: {
         type: String,
         required: true,
-        // emun: ['ADMIN', 'USER']
+        emun: ['ADMIN', 'USER']
     },
     estado: {
         type: Boolean,
         default: true
     },
-    estado: {
+    google: {
         type: Boolean,
         default: false
     }
